@@ -16,8 +16,19 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname,'../public')));
 
 
-io.on('connection', () => {
-    console.log("Websocket")
+io.on('connection', (socket) => {
+    console.log("Websocket");
+
+    socket.emit('message','welcome');
+    socket.broadcast.emit('message','A new User Has Joined')
+
+    socket.on('messageNew',(mess) => {
+        console.log(mess);
+        io.emit('message',mess);
+    })
+    socket.on('disconnect',() => {
+        io.emit('message','A user has left');
+    })
 })
 
 server.listen(port,() => {
