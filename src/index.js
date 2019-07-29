@@ -26,8 +26,9 @@ io.on('connection', (socket) => {
         console.log(mess);
         io.emit('message',mess);
     })
-    socket.on('send-loc',(position) => {
+    socket.on('send-loc',(position,callback) => {
         io.emit('message',`location: lat = ${position.latitude} and long = ${position.longitude}`)
+        callback();
     })
     socket.on('disconnect',() => {
         io.emit('message','A user has left');
