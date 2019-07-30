@@ -7,9 +7,24 @@ const $messageFormInput = $messageForm.querySelector('input');
 
 const $messageFormButton = $messageForm.querySelector('button');
 
+const $messages = document.querySelector('#messages')
+
+const locationMessage = document.querySelector('#message-script').innerHTML;
+
 socket.on('message',(msg) => {
     console.log(msg);
 })
+
+socket.on('sendlocation',(url) => {
+    const html =    Mustache.render(locationMessage,{
+        url: url
+    });
+    $messages.insertAdjacentHTML('beforeend',html);
+
+})
+
+
+
 $messageForm.addEventListener('submit',(e) => {
     e.preventDefault();
     $messageFormButton.setAttribute('disabled','disabled');
