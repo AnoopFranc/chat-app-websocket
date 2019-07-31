@@ -4,6 +4,8 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 
+const {generateMessage} = require('./utils/message');
+
 
 const app = express();
 
@@ -19,12 +21,14 @@ app.use(express.static(path.join(__dirname,'../public')));
 io.on('connection', (socket) => {
     console.log("Websocket");
 
-    socket.emit('message','welcome');
+
+
+    socket.emit('message',generateMessage('Welcome!'))
     socket.broadcast.emit('message','A new User Has Joined')
 
     socket.on('messageNew',(mess) => {
         console.log(mess);
-        io.emit('message',mess);
+        io.emit('message',generateMessage(mess));
     })
     socket.on('send-loc',(position,callback) => {
         io.emit('sendlocation',`https://www.google.com/maps?q=${position.latitude},${position.longitude}`)

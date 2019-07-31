@@ -10,8 +10,14 @@ const $messageFormButton = $messageForm.querySelector('button');
 const $messages = document.querySelector('#messages')
 
 const locationMessage = document.querySelector('#message-script').innerHTML;
+const messageCreation = document.querySelector('#message-creation').innerHTML;
 
 socket.on('message',(msg) => {
+    const html = Mustache.render(messageCreation,{
+        message: msg.text,
+        createdAt: moment(msg.createdAt).format('h:mm a')
+    })
+    $messages.insertAdjacentHTML('beforeend',html)
     console.log(msg);
 })
 
@@ -27,12 +33,12 @@ socket.on('sendlocation',(url) => {
 
 $messageForm.addEventListener('submit',(e) => {
     e.preventDefault();
-    $messageFormButton.setAttribute('disabled','disabled');
+   // $messageFormButton.setAttribute('disabled','disabled');
 
     const message = e.target.elements.message.value;
 
     socket.emit('messageNew', message, () => {
-        $messageFormButton.removeAttribute('disabled');
+       // $messageFormButton.removeAttribute('disabled');
         $messageFormInput.value = '';
     });
 })
