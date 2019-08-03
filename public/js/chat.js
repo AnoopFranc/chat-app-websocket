@@ -9,6 +9,8 @@ const $messageFormButton = $messageForm.querySelector('button');
 
 const $messages = document.querySelector('#messages')
 
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
+
 const locationMessage = document.querySelector('#message-script').innerHTML;
 const messageCreation = document.querySelector('#message-creation').innerHTML;
 
@@ -62,5 +64,11 @@ $location.addEventListener('click',() => {
                 console.log('location shared')
             })
         })
+    }
+})
+socket.emit('join', { username, room },(error) => {
+    if(error){
+    alert(error)
+    location.href='/'
     }
 })
